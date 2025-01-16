@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:data_handling_module/models/employee_model.dart';
+import 'package:dio/dio.dart';
 import 'package:http/http.dart' as http;
 
 class EmployeeController {
@@ -11,18 +12,28 @@ class EmployeeController {
     List<Employee> employees = [];
 
     try {
-      var response = await http.get(
-        Uri.parse(url),
-        headers: {
-          HttpHeaders.cookieHeader: 'humans_21909=1',
-        },
+      var response = await Dio().get(
+        url,
+        options: Options(
+          headers: {
+            HttpHeaders.cookieHeader: 'humans_21909=1'
+          },
+           validateStatus: (status) {
+              return status! < 500; 
+            },
+        ),
       );
-      var data = jsonDecode(response.body);
+     if (response.statusCode == 200) {
+        var data = response.data['data'];
+    
 
-      data['data'].forEach((emp) {
-        var employee = Employee.fromJson(emp);
-        employees.add(employee);
-      });
+        for (var emp in data) {
+          var employee = Employee.fromJson(emp);
+          employees.add(employee);
+        }
+      } else {
+        print('Error: ${response.statusCode} - ${response.statusMessage}');
+      }
     } catch (e) {
       throw Exception(e);
     }

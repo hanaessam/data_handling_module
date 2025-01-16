@@ -1,5 +1,6 @@
 import 'package:data_handling_module/controllers/employee_controller.dart';
 import 'package:data_handling_module/models/employee_model.dart';
+import 'package:data_handling_module/views/employee_screen.dart';
 import 'package:flutter/material.dart';
 
 class MyHomePage extends StatefulWidget {
@@ -44,6 +45,14 @@ class _MyHomePageState extends State<MyHomePage> {
               itemCount: employees.length,
               itemBuilder: (context, index) {
                 return ListTile(
+                  onTap: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => EmployeeScreen(
+                        employee: employees[index],
+                      ),
+                    ),
+                  ),
                   title: Text(employees[index].employeeName),
                   subtitle:
                       Text('Salary: \$ ${employees[index].employeeSalary}'),
