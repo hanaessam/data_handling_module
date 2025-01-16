@@ -3,6 +3,7 @@
 Getting the data of employee list from API: http://dummy.restapiexample.com/api/v1/employees
 
 Used Dio package for request
+Used shared prefrences for data caching
 
 
 Project setup and architecture:
